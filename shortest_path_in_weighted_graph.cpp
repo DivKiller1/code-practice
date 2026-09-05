@@ -2,8 +2,8 @@
 // Difficulty: Medium
 // Topic: graphs
 //
-// Description: Given a directed graph with N vertices and M edges with non-negative weights, find the shortest path distance from vertex S to vertex T using Dijkstra's algorithm.
-// Example Input: N=4, M=5, S=1, T=4 with edges (1 2 2), (1 3 4), (2 3 1), (2 4 7), (3 4 3)
+// Description: Given a weighted undirected graph with N vertices and M edges, find the shortest path distance from a source vertex to a destination vertex.
+// Example Input: 5 6 1 5 1 2 2 1 3 4 2 3 1 2 4 7 3 5 3 4 5 1
 // Example Output: 6
 
 #include <iostream>
@@ -14,53 +14,52 @@ using namespace std;
 
 const long long INF = 1e18;
 
-struct Edge {
-    int to;
-    long long weight;
-};
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, m, s, t;
-    if (!(cin >> n >> m >> s >> t)) {
-        return 0;
-    }
+    int n, m, src, dst;
+    if (!(cin >> n >> m >> src >> dst)) return 0;
 
-    vector<vector<Edge>> adj(n + 1);
+    vector<vector<pair<int, long long>>> adj(n + 1);
     for (int i = 0; i < m; ++i) {
         int u, v;
         long long w;
         cin >> u >> v >> w;
         adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
     }
 
     vector<long long> dist(n + 1, INF);
     priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
 
-    dist[s] = 0;
-    pq.push({0, s});
+    dist[src] = 0;
+    pq.push({0, src});
 
     while (!pq.empty()) {
-        auto [d, u] = pq.top();
+        pair<long long, int> top = pq.top();
         pq.pop();
 
+        long long d = top.first;
+        int u = top.second;
+
         if (d > dist[u]) continue;
-        if (u == t) break;
 
         for (const auto& edge : adj[u]) {
-            if (dist[u] + edge.weight < dist[edge.to]) {
-                dist[edge.to] = dist[u] + edge.weight;
-                pq.push({dist[edge.to], edge.to});
+            int v = edge.first;
+            long long w = edge.second;
+
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
             }
         }
     }
 
-    if (dist[t] == INF) {
+    if (dist[dst] == INF) {
         cout << -1 << "\n";
     } else {
-        cout << dist[t] << "\n";
+        cout << dist[dst] << "\n";
     }
 
     return 0;

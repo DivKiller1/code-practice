@@ -2,14 +2,11 @@
 // Difficulty: Medium
 // Topic: greedy
 //
-// Description: Given n intervals with start and end times, find the maximum number of mutually non-overlapping intervals you can select.
+// Description: Given a list of intervals with start and end times, find the maximum number of mutually non-overlapping intervals that can be selected.
 // Example Input: 4\n1 2\n2 3\n3 4\n1 3
 // Example Output: 3
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 struct Interval {
@@ -17,7 +14,7 @@ struct Interval {
     int end;
 };
 
-bool compareIntervals(const Interval& a, const Interval& b) {
+bool compareIntervals(const Interval &a, const Interval &b) {
     if (a.end != b.end) {
         return a.end < b.end;
     }
@@ -41,10 +38,10 @@ int main() {
 
     sort(intervals.begin(), intervals.end(), compareIntervals);
 
-    int count = 1;
-    int last_end = intervals[0].end;
+    int count = 0;
+    long long last_end = -2e18; // Use a sufficiently small value to handle negative coordinates
 
-    for (int i = 1; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (intervals[i].start >= last_end) {
             count++;
             last_end = intervals[i].end;

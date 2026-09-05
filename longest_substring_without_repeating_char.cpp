@@ -24,24 +24,22 @@ int main() {
         return 0;
     }
 
-    int n = s.length();
-    unordered_map<char, int> lastPos;
-    int maxLen = 0;
-    int windowStart = 0;
+    unordered_map<char, int> last_seen;
+    int max_length = 0;
+    int left = 0;
 
-    for (int windowEnd = 0; windowEnd < n; ++windowEnd) {
-        char currentChar = s[windowEnd];
+    for (int right = 0; right < (int)s.length(); ++right) {
+        char current_char = s[right];
 
-        if (lastPos.find(currentChar) != lastPos.end() && lastPos[currentChar] >= windowStart) {
-            windowStart = lastPos[currentChar] + 1;
+        if (last_seen.find(current_char) != last_seen.end() && last_seen[current_char] >= left) {
+            left = last_seen[current_char] + 1;
         }
 
-        lastPos[currentChar] = windowEnd;
-        int currentLen = windowEnd - windowStart + 1;
-        maxLen = max(maxLen, currentLen);
+        last_seen[current_char] = right;
+        max_length = max(max_length, right - left + 1);
     }
 
-    cout << maxLen << "\n";
+    cout << max_length << "\n";
 
     return 0;
 }
