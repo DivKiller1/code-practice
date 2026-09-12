@@ -2,11 +2,14 @@
 // Difficulty: Medium
 // Topic: graphs
 //
-// Description: Given a weighted undirected graph with N vertices and M edges, find the length of the shortest path from vertex 1 to vertex N.
-// Example Input: 5 6, Edges: (1,2,2), (2,5,5), (2,3,4), (1,4,1), (4,3,1), (3,5,2)
-// Example Output: 4
+// Description: Given a directed weighted graph with N vertices and M edges, calculate the shortest distance from a given source node to all vertices using Dijkstra's algorithm. If a node is unreachable, output -1 for its distance.
+// Example Input: 5 6 1\n1 2 2\n1 3 4\n2 3 1\n2 4 7\n3 5 3\n4 5 1
+// Example Output: 0 2 3 9 6
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+
 using namespace std;
 
 const long long INF = 1e18;
@@ -15,8 +18,8 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, m;
-    if (!(cin >> n >> m)) return 0;
+    int n, m, src;
+    if (!(cin >> n >> m >> src)) return 0;
 
     vector<vector<pair<int, long long>>> adj(n + 1);
     for (int i = 0; i < m; i++) {
@@ -24,17 +27,38 @@ int main() {
         long long w;
         cin >> u >> v >> w;
         adj[u].push_back({v, w});
-        adj[v].push_back({u, w});
     }
 
     vector<long long> dist(n + 1, INF);
     priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
 
-    dist[1] = 0;
-    pq.push({0, 1});
+    dist[src] = 0;
+    pq.push({0, src});
 
     while (!pq.empty()) {
         auto [d, u] = pq.top();
         pq.pop();
 
-        if (d > dist[u])
+        if (d > dist[u]) continue;
+
+        for (const auto& edge : adj[u]) {
+            int v = edge.first;
+            long long w = edge.second;
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        if (dist[i] == INF) {
+            cout << -1 << (i == n ? "" : " ");
+        } else {
+            cout << dist[i] << (i == n ? "" : " ");
+        }
+    }
+    cout << "\n";
+
+    return 0;
+}
