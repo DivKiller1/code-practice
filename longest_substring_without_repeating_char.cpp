@@ -28,7 +28,7 @@ int main() {
     int max_length = 0;
     int left = 0;
 
-    for (int right = 0; right < (int)s.length(); ++right) {
+    for (int right = 0; right < static_cast<int>(s.length()); right++) {
         char current_char = s[right];
 
         if (last_seen.find(current_char) != last_seen.end() && last_seen[current_char] >= left) {

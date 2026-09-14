@@ -2,21 +2,24 @@
 // Difficulty: Medium
 // Topic: trees
 //
-// Description: Given an undirected tree with N nodes and N-1 edges, calculate the diameter of the tree, which is the length of the longest path between any pair of nodes.
-// Example Input: 5\n1 2\n1 3\n2 4\n2 5
+// Description: Given an undirected tree with N nodes and N-1 edges, calculate the diameter of the tree, which is defined as the maximum length (number of edges) of a simple path between any pair of nodes.
+// Example Input: 5 1 2 1 3 2 4 2 5
 // Example Output: 3
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-void dfs(int u, int p, int dist, const vector<vector<int>>& adj, int& maxDist, int& farthestNode) {
-    if (dist > maxDist) {
-        maxDist = dist;
-        farthestNode = u;
+void dfs(int u, int p, int depth, int &max_depth, int &farthest_node, const vector<vector<int>> &adj) {
+    if (depth > max_depth) {
+        max_depth = depth;
+        farthest_node = u;
     }
     for (int v : adj[u]) {
         if (v != p) {
-            dfs(v, u, dist + 1, adj, maxDist, farthestNode);
+            dfs(v, u, depth + 1, max_depth, farthest_node, adj);
         }
     }
 }
@@ -41,16 +44,13 @@ int main() {
         adj[v].push_back(u);
     }
 
-    int farthestNode = 1;
-    int maxDist = -1;
+    int max_depth = -1;
+    int farthest_node = 1;
+    dfs(1, 0, 0, max_depth, farthest_node, adj);
 
-    // First DFS to find the node farthest from arbitrary node 1
-    dfs(1, 0, 0, adj, maxDist, farthestNode);
-
-    // Second DFS from the farthest node to find the diameter
-    int diameter = 0;
-    int startNode = farthestNode;
-    dfs(startNode, 0, 0, adj, diameter, farthestNode);
+    int diameter = -1;
+    int other_end = farthest_node;
+    dfs(farthest_node, 0, 0, diameter, other_end, adj);
 
     cout << diameter << "\n";
 

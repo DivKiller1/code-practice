@@ -2,8 +2,7 @@
 // Difficulty: Medium
 // Topic: two pointers
 //
-// Description: Given an array of non-negative integers representing line heights,
-// find two lines that together with the x-axis form a container holding the most water.
+// Description: Given an array of n non-negative integers representing line heights, find two lines that together with the x-axis form a container holding the maximum area of water.
 // Example Input: 9 1 8 6 2 5 4 8 3 7
 // Example Output: 49
 
@@ -20,9 +19,10 @@ int maxArea(const vector<int>& height) {
 
     while (left < right) {
         int current_height = min(height[left], height[right]);
-        int width = right - left;
-        int current_water = current_height * width;
-        max_water = max(max_water, current_water);
+        int current_width = right - left;
+        int current_area = current_height * current_width;
+
+        max_water = max(max_water, current_area);
 
         if (height[left] < height[right]) {
             left++;
@@ -39,9 +39,7 @@ int main() {
     cin.tie(NULL);
 
     int n;
-    if (!(cin >> n)) {
-        return 0;
-    }
+    if (!(cin >> n)) return 0;
 
     vector<int> height(n);
     for (int i = 0; i < n; i++) {
