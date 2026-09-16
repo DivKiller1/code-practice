@@ -2,25 +2,29 @@
 // Difficulty: Hard
 // Topic: stack
 //
-// Description: Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
-// Example Input: 6 2 1 5 6 2 3
+// Description: Given an array of integers representing the height of bars in a histogram where the width of each bar is 1, find the area of the largest rectangle in the histogram using a monotonic stack.
+// Example Input: 6\n2 1 5 6 2 3
 // Example Output: 10
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <algorithm>
+
 using namespace std;
 
-int largestRectangleArea(vector<int>& heights) {
+long long largestRectangleArea(const vector<int>& heights) {
     int n = heights.size();
     stack<int> st;
-    int max_area = 0;
+    long long max_area = 0;
 
-    for (int i = 0; i <= n; i++) {
+    for (int i = 0; i <= n; ++i) {
         int current_height = (i == n) ? 0 : heights[i];
-        while (!st.empty() && current_height < heights[st.top()]) {
-            int h = heights[st.top()];
+        while (!st.empty() && heights[st.top()] > current_height) {
+            int height = heights[st.top()];
             st.pop();
-            int w = st.empty() ? i : i - st.top() - 1;
-            max_area = max(max_area, h * w);
+            int width = st.empty() ? i : i - st.top() - 1;
+            max_area = max(max_area, (long long)height * width);
         }
         st.push(i);
     }
@@ -33,14 +37,17 @@ int main() {
     cin.tie(NULL);
 
     int n;
-    if (!(cin >> n)) return 0;
+    if (!(cin >> n)) {
+        return 0;
+    }
 
     vector<int> heights(n);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         cin >> heights[i];
     }
 
-    cout << largestRectangleArea(heights) << endl;
+    long long result = largestRectangleArea(heights);
+    cout << result << "\n";
 
     return 0;
 }

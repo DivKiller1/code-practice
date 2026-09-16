@@ -2,14 +2,11 @@
 // Difficulty: Medium
 // Topic: trees
 //
-// Description: Given an undirected tree with N nodes and N-1 edges, calculate the diameter of the tree, which is defined as the maximum length (number of edges) of a simple path between any pair of nodes.
-// Example Input: 5 1 2 1 3 2 4 2 5
+// Description: Given an unweighted tree with N nodes and N-1 edges, calculate the diameter of the tree, defined as the maximum distance (number of edges) between any pair of nodes.
+// Example Input: 5\n1 2\n1 3\n2 4\n2 5
 // Example Output: 3
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 void dfs(int u, int p, int depth, int &max_depth, int &farthest_node, const vector<vector<int>> &adj) {
@@ -46,13 +43,16 @@ int main() {
 
     int max_depth = -1;
     int farthest_node = 1;
+
+    // First DFS to find the node farthest from node 1
     dfs(1, 0, 0, max_depth, farthest_node, adj);
 
-    int diameter = -1;
-    int other_end = farthest_node;
-    dfs(farthest_node, 0, 0, diameter, other_end, adj);
+    // Second DFS from the farthest node found to determine tree diameter
+    int root = farthest_node;
+    max_depth = -1;
+    dfs(root, 0, 0, max_depth, farthest_node, adj);
 
-    cout << diameter << "\n";
+    cout << max_depth << "\n";
 
     return 0;
 }

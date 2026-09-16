@@ -2,9 +2,9 @@
 // Difficulty: Medium
 // Topic: binary search
 //
-// Description: Given an array of package weights and an integer days, return the least weight capacity of a ship to ship all packages within days.
-// Example Input: 10 5 1 2 3 4 5 6 7 8 9 10
-// Example Output: 15
+// Description: Given an array of package weights and a number of days, find the minimum weight capacity of a ship such that all packages can be shipped within the given days in order.
+// Example Input: 6 3\n1 2 3 4 5 6
+// Example Output: 9
 
 #include <iostream>
 #include <vector>
@@ -14,17 +14,17 @@
 using namespace std;
 
 bool canShip(const vector<int>& weights, int days, int capacity) {
-    int current_days = 1;
-    int current_load = 0;
-    for (int weight : weights) {
-        if (current_load + weight > capacity) {
-            current_days++;
-            current_load = weight;
+    int current_weight = 0;
+    int needed_days = 1;
+    for (int w : weights) {
+        if (current_weight + w > capacity) {
+            needed_days++;
+            current_weight = w;
         } else {
-            current_load += weight;
+            current_weight += w;
         }
     }
-    return current_days <= days;
+    return needed_days <= days;
 }
 
 int main() {
@@ -32,9 +32,7 @@ int main() {
     cin.tie(NULL);
 
     int n, days;
-    if (!(cin >> n >> days)) {
-        return 0;
-    }
+    if (!(cin >> n >> days)) return 0;
 
     vector<int> weights(n);
     int max_weight = 0;
@@ -48,18 +46,19 @@ int main() {
 
     int low = max_weight;
     int high = total_weight;
-    int result = high;
+    int ans = high;
 
     while (low <= high) {
         int mid = low + (high - low) / 2;
         if (canShip(weights, days, mid)) {
-            result = mid;
+            ans = mid;
             high = mid - 1;
         } else {
             low = mid + 1;
         }
     }
 
-    cout << result << "\n";
+    cout << ans << "\n";
+
     return 0;
 }
