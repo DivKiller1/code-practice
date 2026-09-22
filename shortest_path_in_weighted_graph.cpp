@@ -2,9 +2,9 @@
 // Difficulty: Medium
 // Topic: graphs
 //
-// Description: Given a directed weighted graph with N vertices and M edges, calculate the shortest distance from a given source node to all vertices using Dijkstra's algorithm. If a node is unreachable, output -1 for its distance.
-// Example Input: 5 6 1\n1 2 2\n1 3 4\n2 3 1\n2 4 7\n3 5 3\n4 5 1
-// Example Output: 0 2 3 9 6
+// Description: Given a directed graph with n vertices, m edges, and non-negative edge weights, compute the shortest distance from a starting vertex to all vertices using Dijkstra's algorithm.
+// Example Input: 4 5 1 \n 1 2 4 \n 1 3 2 \n 2 3 1 \n 2 4 5 \n 3 4 8
+// Example Output: 0 4 2 9
 
 #include <iostream>
 #include <vector>
@@ -21,10 +21,9 @@ int main() {
     int n, m, src;
     if (!(cin >> n >> m >> src)) return 0;
 
-    vector<vector<pair<int, long long>>> adj(n + 1);
+    vector<vector<pair<int, int>>> adj(n + 1);
     for (int i = 0; i < m; i++) {
-        int u, v;
-        long long w;
+        int u, v, w;
         cin >> u >> v >> w;
         adj[u].push_back({v, w});
     }
@@ -43,9 +42,10 @@ int main() {
 
         for (const auto& edge : adj[u]) {
             int v = edge.first;
-            long long w = edge.second;
-            if (dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
+            int weight = edge.second;
+
+            if (dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
                 pq.push({dist[v], v});
             }
         }

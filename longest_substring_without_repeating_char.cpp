@@ -1,6 +1,6 @@
 // Problem: Longest Substring Without Repeating Characters
 // Difficulty: Medium
-// Topic: sliding window
+// Topic: strings
 //
 // Description: Given a string s, find the length of the longest substring without repeating characters.
 // Example Input: abcabcbb
@@ -14,32 +14,35 @@
 
 using namespace std;
 
+int lengthOfLongestSubstring(const string& s) {
+    unordered_map<char, int> lastSeen;
+    int maxLength = 0;
+    int start = 0;
+
+    for (int end = 0; end < static_cast<int>(s.length()); end++) {
+        char currentChar = s[end];
+        
+        if (lastSeen.find(currentChar) != lastSeen.end() && lastSeen[currentChar] >= start) {
+            start = lastSeen[currentChar] + 1;
+        }
+
+        lastSeen[currentChar] = end;
+        maxLength = max(maxLength, end - start + 1);
+    }
+
+    return maxLength;
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
     string s;
-    if (!(cin >> s)) {
-        cout << 0 << "\n";
-        return 0;
+    if (cin >> s) {
+        cout << lengthOfLongestSubstring(s) << endl;
+    } else {
+        cout << 0 << endl;
     }
-
-    unordered_map<char, int> last_seen;
-    int max_length = 0;
-    int left = 0;
-
-    for (int right = 0; right < static_cast<int>(s.length()); right++) {
-        char current_char = s[right];
-
-        if (last_seen.find(current_char) != last_seen.end() && last_seen[current_char] >= left) {
-            left = last_seen[current_char] + 1;
-        }
-
-        last_seen[current_char] = right;
-        max_length = max(max_length, right - left + 1);
-    }
-
-    cout << max_length << "\n";
 
     return 0;
 }
