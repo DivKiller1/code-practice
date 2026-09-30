@@ -2,9 +2,9 @@
 // Difficulty: Medium
 // Topic: hashmaps
 //
-// Description: Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
-// Example Input: 3 2\n1 1 1
-// Example Output: 2
+// Description: Given an array of integers and an integer k, return the total number of continuous subarrays whose sum equals to k.
+// Example Input: 5 2\n1 1 1 -1 2
+// Example Output: 4
 
 #include <iostream>
 #include <vector>
@@ -12,43 +12,39 @@
 
 using namespace std;
 
-int subarraySum(const vector<int>& nums, int k) {
-    unordered_map<int, int> prefixCounts;
-    prefixCounts[0] = 1;
-    
-    int currentSum = 0;
-    int totalSubarrays = 0;
-    
-    for (int num : nums) {
-        currentSum += num;
-        int neededSum = currentSum - k;
-        
-        if (prefixCounts.find(neededSum) != prefixCounts.end()) {
-            totalSubarrays += prefixCounts[neededSum];
-        }
-        
-        prefixCounts[currentSum]++;
-    }
-    
-    return totalSubarrays;
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    int n, k;
+
+    int n;
+    long long k;
     if (!(cin >> n >> k)) {
         return 0;
     }
-    
-    vector<int> nums(n);
-    for (int i = 0; i < n; ++i) {
+
+    vector<long long> nums(n);
+    for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
-    
-    int result = subarraySum(nums, k);
-    cout << result << "\n";
-    
+
+    unordered_map<long long, int> prefix_sum_counts;
+    prefix_sum_counts[0] = 1;
+
+    long long current_sum = 0;
+    long long total_subarrays = 0;
+
+    for (int i = 0; i < n; i++) {
+        current_sum += nums[i];
+        
+        long long target = current_sum - k;
+        if (prefix_sum_counts.find(target) != prefix_sum_counts.end()) {
+            total_subarrays += prefix_sum_counts[target];
+        }
+
+        prefix_sum_counts[current_sum]++;
+    }
+
+    cout << total_subarrays << endl;
+
     return 0;
 }
