@@ -2,13 +2,14 @@
 // Difficulty: Medium
 // Topic: dynamic programming
 //
-// Description: Given weights and values of N items, find the maximum total value that can be obtained by choosing a subset of items such that their total weight does not exceed capacity W.
-// Example Input: 3 50
-// 60 100 120
-// 10 20 30
+// Description: Given n items with specified weights and values, determine the maximum total value that can be placed in a knapsack of capacity W.
+// Example Input: 3 50\n60 100 120\n10 20 30
 // Example Output: 220
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
 int main() {
@@ -16,9 +17,7 @@ int main() {
     cin.tie(NULL);
 
     int n, W;
-    if (!(cin >> n >> W)) {
-        return 0;
-    }
+    if (!(cin >> n >> W)) return 0;
 
     vector<int> val(n);
     for (int i = 0; i < n; i++) {
