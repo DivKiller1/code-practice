@@ -2,15 +2,14 @@
 // Difficulty: Medium
 // Topic: queue
 //
-// Description: Given a string representing a stream of characters, find the first non-repeating character after each insertion. Output '#' if no non-repeating character exists.
-// Example Input: aabccxb
-// Example Output: a # b b b b x
+// Description: Given a string representing a stream of characters, find the first non-repeating character after processing each character. Output '#' if no non-repeating character exists at that point.
+// Example Input: aabc
+// Example Output: a#bb
 
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <unordered_map>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -23,29 +22,26 @@ int main() {
         return 0;
     }
 
-    unordered_map<char, int> freq;
     queue<char> q;
-    vector<char> result;
+    vector<int> charCount(26, 0);
+    string result = "";
 
-    for (char ch : stream) {
-        freq[ch]++;
-        q.push(ch);
+    for (char c : stream) {
+        q.push(c);
+        charCount[c - 'a']++;
 
-        while (!q.empty() && freq[q.front()] > 1) {
+        while (!q.empty() && charCount[q.front() - 'a'] > 1) {
             q.pop();
         }
 
-        if (q.empty()) {
-            result.push_back('#');
+        if (!q.empty()) {
+            result += q.front();
         } else {
-            result.push_back(q.front());
+            result += '#';
         }
     }
 
-    for (size_t i = 0; i < result.size(); i++) {
-        cout << result[i] << (i + 1 == result.size() ? "" : " ");
-    }
-    cout << "\n";
+    cout << result << "\n";
 
     return 0;
 }
