@@ -2,8 +2,8 @@
 // Difficulty: Medium
 // Topic: dynamic programming
 //
-// Description: Given n items with specified weights and values, determine the maximum total value that can be placed in a knapsack of capacity W.
-// Example Input: 3 50\n60 100 120\n10 20 30
+// Description: Given weights and values of N items and a knapsack capacity W, find the maximum value subset of items such that total weight does not exceed W.
+// Example Input: 3 50 \n 10 20 30 \n 60 100 120
 // Example Output: 220
 
 #include <iostream>
@@ -16,28 +16,32 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, W;
-    if (!(cin >> n >> W)) return 0;
-
-    vector<int> val(n);
-    for (int i = 0; i < n; i++) {
-        cin >> val[i];
+    int n, w;
+    if (!(cin >> n >> w)) {
+        return 0;
     }
 
-    vector<int> wt(n);
+    vector<int> weights(n);
+    vector<int> values(n);
+
     for (int i = 0; i < n; i++) {
-        cin >> wt[i];
+        cin >> weights[i];
     }
 
-    vector<int> dp(W + 1, 0);
+    for (int i = 0; i < n; i++) {
+        cin >> values[i];
+    }
+
+    // dp[j] stores the maximum value achievable with maximum capacity j
+    vector<int> dp(w + 1, 0);
 
     for (int i = 0; i < n; i++) {
-        for (int w = W; w >= wt[i]; w--) {
-            dp[w] = max(dp[w], dp[w - wt[i]] + val[i]);
+        for (int j = w; j >= weights[i]; j--) {
+            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
         }
     }
 
-    cout << dp[W] << "\n";
+    cout << dp[w] << "\n";
 
     return 0;
 }

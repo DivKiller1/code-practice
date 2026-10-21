@@ -2,7 +2,7 @@
 // Difficulty: Medium
 // Topic: sorting
 //
-// Description: Given a list of intervals with start and end times, merge all overlapping intervals and print the remaining intervals in sorted order.
+// Description: Given a collection of intervals, merge all overlapping intervals and print the resulting intervals sorted by start time.
 // Example Input: 4 1 3 2 6 8 10 15 18
 // Example Output: 1 6 8 10 15 18
 
@@ -17,7 +17,7 @@ struct Interval {
     int end;
 };
 
-bool compareIntervals(const Interval &a, const Interval &b) {
+bool compareIntervals(const Interval& a, const Interval& b) {
     if (a.start != b.start) {
         return a.start < b.start;
     }
@@ -44,7 +44,7 @@ int main() {
     merged.push_back(intervals[0]);
 
     for (int i = 1; i < n; i++) {
-        Interval &last = merged.back();
+        Interval& last = merged.back();
         if (intervals[i].start <= last.end) {
             last.end = max(last.end, intervals[i].end);
         } else {
@@ -53,12 +53,8 @@ int main() {
     }
 
     for (size_t i = 0; i < merged.size(); i++) {
-        cout << merged[i].start << " " << merged[i].end;
-        if (i + 1 < merged.size()) {
-            cout << " ";
-        }
+        cout << merged[i].start << " " << merged[i].end << "\n";
     }
-    cout << "\n";
 
     return 0;
 }

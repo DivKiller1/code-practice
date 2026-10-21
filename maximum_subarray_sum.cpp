@@ -2,11 +2,14 @@
 // Difficulty: Medium
 // Topic: arrays
 //
-// Description: Given an array of integers, find the contiguous subarray with the largest sum and return its sum using Kadane's Algorithm.
-// Example Input: 9 -2 1 -3 4 -1 2 1 -5 4
+// Description: Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+// Example Input: 9\n-2 1 -3 4 -1 2 1 -5 4
 // Example Output: 6
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
 int main() {
