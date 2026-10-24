@@ -2,14 +2,17 @@
 // Difficulty: Medium
 // Topic: graphs
 //
-// Description: Given a weighted directed graph with non-negative edge weights and a starting vertex, calculate the shortest distance from the source vertex to all other vertices.
-// Example Input: 5 6 1\n1 2 2\n1 3 4\n2 3 1\n2 4 7\n3 5 3\n5 4 2
-// Example Output: 0 2 3 8 6
+// Description: Given a directed graph with N vertices, M weighted edges, and a starting vertex S, compute the shortest path distance from S to every vertex. If a vertex is unreachable, output -1.
+// Example Input: 5 6 1
+// 1 2 2
+// 1 3 4
+// 2 3 1
+// 2 4 7
+// 3 5 3
+// 4 5 1
+// Example Output: 0 2 3 9 6
 
-#include <iostream>
-#include <vector>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 const long long INF = 1e18;
@@ -18,10 +21,8 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, m, src;
-    if (!(cin >> n >> m >> src)) {
-        return 0;
-    }
+    int n, m, start;
+    if (!(cin >> n >> m >> start)) return 0;
 
     vector<vector<pair<int, long long>>> adj(n + 1);
     for (int i = 0; i < m; i++) {
@@ -34,19 +35,14 @@ int main() {
     vector<long long> dist(n + 1, INF);
     priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
 
-    dist[src] = 0;
-    pq.push({0, src});
+    dist[start] = 0;
+    pq.push({0, start});
 
     while (!pq.empty()) {
-        auto top = pq.top();
+        auto [d, u] = pq.top();
         pq.pop();
 
-        long long d = top.first;
-        int u = top.second;
-
-        if (d > dist[u]) {
-            continue;
-        }
+        if (d > dist[u]) continue;
 
         for (const auto& edge : adj[u]) {
             int v = edge.first;
@@ -61,12 +57,9 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
         if (dist[i] == INF) {
-            cout << -1;
+            cout << -1 << (i == n ? "" : " ");
         } else {
-            cout << dist[i];
-        }
-        if (i < n) {
-            cout << " ";
+            cout << dist[i] << (i == n ? "" : " ");
         }
     }
     cout << "\n";

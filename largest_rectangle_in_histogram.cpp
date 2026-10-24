@@ -2,9 +2,9 @@
 // Difficulty: Hard
 // Topic: stack
 //
-// Description: Given an array of integers representing the bar heights in a histogram,
-// calculate the area of the largest rectangle that can be formed within the histogram.
-// Example Input: 6\n2 1 5 6 2 3
+// Description: Given an array of heights representing a histogram where each bar has width 1,
+// compute the area of the largest rectangle that can be formed within the histogram.
+// Example Input: 6 2 1 5 6 2 3
 // Example Output: 10
 
 #include <iostream>
@@ -14,25 +14,6 @@
 
 using namespace std;
 
-long long getMaxArea(const vector<int>& heights) {
-    int n = heights.size();
-    stack<int> st;
-    long long maxArea = 0;
-
-    for (int i = 0; i <= n; i++) {
-        int currentHeight = (i == n) ? 0 : heights[i];
-        while (!st.empty() && heights[st.top()] > currentHeight) {
-            int h = heights[st.top()];
-            st.pop();
-            int width = st.empty() ? i : i - st.top() - 1;
-            maxArea = max(maxArea, (long long)h * width);
-        }
-        st.push(i);
-    }
-
-    return maxArea;
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -40,12 +21,26 @@ int main() {
     int n;
     if (!(cin >> n)) return 0;
 
-    vector<int> heights(n);
+    vector<long long> heights(n);
     for (int i = 0; i < n; i++) {
         cin >> heights[i];
     }
 
-    cout << getMaxArea(heights) << "\n";
+    stack<int> st;
+    long long max_area = 0;
+
+    for (int i = 0; i <= n; i++) {
+        long long current_height = (i == n) ? 0 : heights[i];
+        while (!st.empty() && heights[st.top()] >= current_height) {
+            long long h = heights[st.top()];
+            st.pop();
+            long long w = st.empty() ? i : i - st.top() - 1;
+            max_area = max(max_area, h * w);
+        }
+        st.push(i);
+    }
+
+    cout << max_area << "\n";
 
     return 0;
 }
