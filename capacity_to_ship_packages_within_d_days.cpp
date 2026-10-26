@@ -2,9 +2,10 @@
 // Difficulty: Medium
 // Topic: binary search
 //
-// Description: Given an array of package weights and an integer days, find the minimum weight capacity of a ship to transport all packages within the given number of days.
-// Example Input: 6 3 1 2 3 4 5 6
-// Example Output: 9
+// Description: Given an array of package weights and an integer days, find the minimum weight capacity
+// of a ship to transport all packages within the given number of days in the given order.
+// Example Input: 6 3 \n 3 2 2 4 1 4
+// Example Output: 6
 
 #include <iostream>
 #include <vector>
@@ -14,22 +15,25 @@
 using namespace std;
 
 bool canShip(const vector<int>& weights, int days, int capacity) {
-    int current_weight = 0;
-    int required_days = 1;
-
+    int daysNeeded = 1;
+    int currentLoad = 0;
+    
     for (int w : weights) {
-        if (current_weight + w > capacity) {
-            required_days++;
-            current_weight = w;
+        if (w > capacity) {
+            return false;
+        }
+        if (currentLoad + w > capacity) {
+            daysNeeded++;
+            currentLoad = w;
         } else {
-            current_weight += w;
+            currentLoad += w;
         }
     }
-
-    return required_days <= days;
+    
+    return daysNeeded <= days;
 }
 
-int minShipCapacity(const vector<int>& weights, int days) {
+int shipWithinDays(const vector<int>& weights, int days) {
     int low = *max_element(weights.begin(), weights.end());
     int high = accumulate(weights.begin(), weights.end(), 0);
     int ans = high;
@@ -43,7 +47,7 @@ int minShipCapacity(const vector<int>& weights, int days) {
             low = mid + 1;
         }
     }
-
+    
     return ans;
 }
 
@@ -59,7 +63,7 @@ int main() {
         cin >> weights[i];
     }
 
-    cout << minShipCapacity(weights, days) << "\n";
+    cout << shipWithinDays(weights, days) << "\n";
 
     return 0;
 }
