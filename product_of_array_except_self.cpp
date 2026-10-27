@@ -2,12 +2,33 @@
 // Difficulty: Medium
 // Topic: arrays
 //
-// Description: Given an array of integers nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i] without using division.
+// Description: Given an array of integers, construct an output array where each element at index i is equal to the product of all numbers in the input array except the one at index i, without using division.
 // Example Input: 4 1 2 3 4
 // Example Output: 24 12 8 6
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+
 using namespace std;
+
+vector<int> productExceptSelf(const vector<int>& nums) {
+    int n = nums.size();
+    vector<int> result(n, 1);
+
+    int prefix = 1;
+    for (int i = 0; i < n; i++) {
+        result[i] = prefix;
+        prefix *= nums[i];
+    }
+
+    int suffix = 1;
+    for (int i = n - 1; i >= 0; i--) {
+        result[i] *= suffix;
+        suffix *= nums[i];
+    }
+
+    return result;
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -18,24 +39,12 @@ int main() {
         return 0;
     }
 
-    vector<long long> nums(n);
+    vector<int> nums(n);
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
 
-    vector<long long> result(n, 1);
-
-    long long prefix = 1;
-    for (int i = 0; i < n; i++) {
-        result[i] = prefix;
-        prefix *= nums[i];
-    }
-
-    long long suffix = 1;
-    for (int i = n - 1; i >= 0; i--) {
-        result[i] *= suffix;
-        suffix *= nums[i];
-    }
+    vector<int> result = productExceptSelf(nums);
 
     for (int i = 0; i < n; i++) {
         cout << result[i] << (i == n - 1 ? "" : " ");

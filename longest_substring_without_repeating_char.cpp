@@ -1,43 +1,48 @@
 // Problem: Longest Substring Without Repeating Characters
 // Difficulty: Medium
-// Topic: sliding window
+// Topic: strings
 //
 // Description: Given a string s, find the length of the longest substring without repeating characters.
 // Example Input: abcabcbb
 // Example Output: 3
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
+
+int lengthOfLongestSubstring(const string& s) {
+    vector<int> last_seen(256, -1);
+    int max_len = 0;
+    int start = 0;
+
+    for (int i = 0; i < (int)s.length(); ++i) {
+        unsigned char c = s[i];
+        if (last_seen[c] >= start) {
+            start = last_seen[c] + 1;
+        }
+        last_seen[c] = i;
+        max_len = max(max_len, i - start + 1);
+    }
+
+    return max_len;
+}
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
     string s;
-    if (!(cin >> s)) {
+    if (getline(cin, s)) {
+        if (!s.empty() && s.back() == '\r') {
+            s.pop_back();
+        }
+        cout << lengthOfLongestSubstring(s) << "\n";
+    } else {
         cout << 0 << "\n";
-        return 0;
     }
 
-    vector<int> last_pos(256, -1);
-    int max_len = 0;
-    int left = 0;
-
-    for (int right = 0; right < (int)s.length(); right++) {
-        unsigned char current_char = s[right];
-        
-        if (last_pos[current_char] >= left) {
-            left = last_pos[current_char] + 1;
-        }
-        
-        last_pos[current_char] = right;
-        int current_window_size = right - left + 1;
-        
-        if (current_window_size > max_len) {
-            max_len = current_window_size;
-        }
-    }
-
-    cout << max_len << "\n";
     return 0;
 }
