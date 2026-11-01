@@ -3,9 +3,8 @@
 // Topic: hashmaps
 //
 // Description: Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
-// Example Input: 4 3
-// 1 2 3 -3
-// Example Output: 3
+// Example Input: 3 2\n1 1 1
+// Example Output: 2
 
 #include <iostream>
 #include <vector>
@@ -17,13 +16,12 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n;
-    long long k;
+    int n, k;
     if (!(cin >> n >> k)) {
         return 0;
     }
 
-    vector<long long> nums(n);
+    vector<int> nums(n);
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
@@ -36,10 +34,10 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         current_sum += nums[i];
-        long long target = current_sum - k;
+        long long needed_prefix = current_sum - k;
 
-        if (prefix_counts.find(target) != prefix_counts.end()) {
-            total_subarrays += prefix_counts[target];
+        if (prefix_counts.count(needed_prefix)) {
+            total_subarrays += prefix_counts[needed_prefix];
         }
 
         prefix_counts[current_sum]++;
