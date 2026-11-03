@@ -2,9 +2,9 @@
 // Difficulty: Medium
 // Topic: greedy
 //
-// Description: Given a list of intervals with start and end times, find the maximum number of mutually non-overlapping intervals that can be selected.
-// Example Input: n = 4, intervals = [[1, 3], [2, 4], [3, 5], [0, 6]]
-// Example Output: 2
+// Description: Given a set of N intervals with start and end times, find the maximum number of intervals that can be selected such that no two selected intervals overlap.
+// Example Input: 4 \n 1 3 \n 2 4 \n 3 6 \n 5 7
+// Example Output: 3
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -26,29 +26,11 @@ int main() {
     cin.tie(NULL);
 
     int n;
-    if (!(cin >> n) || n <= 0) {
-        cout << 0 << "\n";
-        return 0;
-    }
+    if (!(cin >> n)) return 0;
 
     vector<Interval> intervals(n);
     for (int i = 0; i < n; i++) {
         cin >> intervals[i].start >> intervals[i].end;
     }
 
-    sort(intervals.begin(), intervals.end(), compareIntervals);
-
-    int count = 0;
-    int lastEnd = INT_MIN;
-
-    for (int i = 0; i < n; i++) {
-        if (intervals[i].start >= lastEnd) {
-            count++;
-            lastEnd = intervals[i].end;
-        }
-    }
-
-    cout << count << "\n";
-
-    return 0;
-}
+    sort(intervals.begin(), intervals

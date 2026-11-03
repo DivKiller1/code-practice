@@ -6,27 +6,24 @@
 // Example Input: abcabcbb
 // Example Output: 3
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-int lengthOfLongestSubstring(const string& s) {
+int lengthOfLongestSubstring(const string &s) {
     vector<int> last_seen(256, -1);
     int max_len = 0;
     int start = 0;
-
-    for (int i = 0; i < (int)s.length(); ++i) {
-        unsigned char c = s[i];
-        if (last_seen[c] >= start) {
-            start = last_seen[c] + 1;
+    int n = s.length();
+    
+    for (int end = 0; end < n; end++) {
+        unsigned char ch = s[end];
+        if (last_seen[ch] >= start) {
+            start = last_seen[ch] + 1;
         }
-        last_seen[c] = i;
-        max_len = max(max_len, i - start + 1);
+        last_seen[ch] = end;
+        max_len = max(max_len, end - start + 1);
     }
-
+    
     return max_len;
 }
 
@@ -35,13 +32,9 @@ int main() {
     cin.tie(NULL);
 
     string s;
-    if (getline(cin, s)) {
-        if (!s.empty() && s.back() == '\r') {
-            s.pop_back();
-        }
-        cout << lengthOfLongestSubstring(s) << "\n";
-    } else {
-        cout << 0 << "\n";
+    if (cin >> s) {
+        int result = lengthOfLongestSubstring(s);
+        cout << result << "\n";
     }
 
     return 0;
