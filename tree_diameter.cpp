@@ -2,8 +2,8 @@
 // Difficulty: Medium
 // Topic: trees
 //
-// Description: Given an undirected tree with N nodes and N-1 edges, find the diameter of the tree, which is the length of the longest path between any pair of nodes.
-// Example Input: 5\n1 2\n1 3\n2 4\n2 5
+// Description: Given an unweighted, undirected tree with N nodes, compute the diameter of the tree, which is the length of the longest path (number of edges) between any pair of nodes.
+// Example Input: 5 1 2 1 3 2 4 2 5
 // Example Output: 3
 
 #include <iostream>
@@ -12,23 +12,16 @@
 
 using namespace std;
 
-int max_diameter = 0;
-
-int dfs(int u, int p, const vector<vector<int>>& adj) {
-    int max1 = 0;
-    int max2 = 0;
+void dfs(int u, int p, int depth, int &max_depth, int &farthest_node, const vector<vector<int>> &adj) {
+    if (depth > max_depth) {
+        max_depth = depth;
+        farthest_node = u;
+    }
     for (int v : adj[u]) {
-        if (v == p) continue;
-        int h = dfs(v, u, adj);
-        if (h > max1) {
-            max2 = max1;
-            max1 = h;
-        } else if (h > max2) {
-            max2 = h;
+        if (v != p) {
+            dfs(v, u, depth + 1, max_depth, farthest_node, adj);
         }
     }
-    max_diameter = max(max_diameter, max1 + max2);
-    return max1 + 1;
 }
 
 int main() {
@@ -44,16 +37,22 @@ int main() {
     }
 
     vector<vector<int>> adj(n + 1);
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 0; i < n - 1; ++i) {
         int u, v;
         cin >> u >> v;
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
 
-    dfs(1, 0, adj);
+    int max_depth = -1;
+    int farthest_node = 1;
+    dfs(1, 0, 0, max_depth, farthest_node, adj);
 
-    cout << max_diameter << "\n";
+    int diameter = -1;
+    int end_node = farthest_node;
+    dfs(farthest_node, 0, 0, diameter, end_node, adj);
+
+    cout << diameter << "\n";
 
     return 0;
 }
