@@ -2,28 +2,32 @@
 // Difficulty: Medium
 // Topic: strings
 //
-// Description: Given a string s, find the length of the longest substring without repeating characters.
+// Description: Given a string s, find the length of the longest substring
+// without repeating characters.
 // Example Input: abcabcbb
 // Example Output: 3
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int lengthOfLongestSubstring(const string &s) {
-    vector<int> last_seen(256, -1);
+int solve(const string& s) {
+    vector<int> last_index(256, -1);
     int max_len = 0;
     int start = 0;
-    int n = s.length();
-    
-    for (int end = 0; end < n; end++) {
-        unsigned char ch = s[end];
-        if (last_seen[ch] >= start) {
-            start = last_seen[ch] + 1;
+
+    for (int i = 0; i < (int)s.length(); ++i) {
+        unsigned char current_char = s[i];
+        if (last_index[current_char] >= start) {
+            start = last_index[current_char] + 1;
         }
-        last_seen[ch] = end;
-        max_len = max(max_len, end - start + 1);
+        last_index[current_char] = i;
+        max_len = max(max_len, i - start + 1);
     }
-    
+
     return max_len;
 }
 
@@ -33,8 +37,10 @@ int main() {
 
     string s;
     if (cin >> s) {
-        int result = lengthOfLongestSubstring(s);
+        int result = solve(s);
         cout << result << "\n";
+    } else {
+        cout << 0 << "\n";
     }
 
     return 0;
