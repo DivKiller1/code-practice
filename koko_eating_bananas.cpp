@@ -2,10 +2,8 @@
 // Difficulty: Medium
 // Topic: binary search
 //
-// Description: Given an array of banana piles and an integer h representing available hours,
-// determine the minimum eating speed k (bananas per hour) to finish all piles within h hours.
-// Example Input: 4 8
-// 3 6 7 11
+// Description: Given an array of banana pile sizes and an integer h representing the available hours, find the minimum eating speed k (bananas per hour) such that Koko can eat all bananas within h hours.
+// Example Input: 4 8\n3 6 7 11
 // Example Output: 4
 
 #include <iostream>
@@ -14,32 +12,12 @@
 
 using namespace std;
 
-bool canFinish(const vector<int>& piles, int h, int k) {
-    long long hoursSpent = 0;
+bool canFinish(const vector<int>& piles, int h, int speed) {
+    long long hours_needed = 0;
     for (int pile : piles) {
-        hoursSpent += (pile + k - 1) / k;
+        hours_needed += (pile + speed - 1) / speed;
     }
-    return hoursSpent <= h;
-}
-
-int minEatingSpeed(const vector<int>& piles, int h) {
-    int low = 1;
-    int high = 0;
-    for (int pile : piles) {
-        high = max(high, pile);
-    }
-
-    int result = high;
-    while (low <= high) {
-        int mid = low + (high - low) / 2;
-        if (canFinish(piles, h, mid)) {
-            result = mid;
-            high = mid - 1;
-        } else {
-            low = mid + 1;
-        }
-    }
-    return result;
+    return hours_needed <= h;
 }
 
 int main() {
@@ -47,15 +25,31 @@ int main() {
     cin.tie(NULL);
 
     int n, h;
-    if (!(cin >> n >> h)) return 0;
-
-    vector<int> piles(n);
-    for (int i = 0; i < n; i++) {
-        cin >> piles[i];
+    if (!(cin >> n >> h)) {
+        return 0;
     }
 
-    int min_speed = minEatingSpeed(piles, h);
-    cout << min_speed << "\n";
+    vector<int> piles(n);
+    int max_pile = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> piles[i];
+        max_pile = max(max_pile, piles[i]);
+    }
 
+    int low = 1;
+    int high = max_pile;
+    int ans = max_pile;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (canFinish(piles, h, mid)) {
+            ans = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    cout << ans << "\n";
     return 0;
 }

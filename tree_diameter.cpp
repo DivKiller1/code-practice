@@ -2,26 +2,46 @@
 // Difficulty: Medium
 // Topic: trees
 //
-// Description: Given an unweighted, undirected tree with N nodes, compute the diameter of the tree, which is the length of the longest path (number of edges) between any pair of nodes.
-// Example Input: 5 1 2 1 3 2 4 2 5
+// Description: Given an unweighted tree with N nodes and N-1 edges, find the length of the longest path (number of edges) between any pair of nodes.
+// Example Input: 5\n1 2\n1 3\n3 4\n3 5
 // Example Output: 3
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
+#include <queue>
+#include <utility>
 
 using namespace std;
 
-void dfs(int u, int p, int depth, int &max_depth, int &farthest_node, const vector<vector<int>> &adj) {
-    if (depth > max_depth) {
-        max_depth = depth;
-        farthest_node = u;
-    }
-    for (int v : adj[u]) {
-        if (v != p) {
-            dfs(v, u, depth + 1, max_depth, farthest_node, adj);
+// BFS function to find the farthest node and its distance from a start node
+pair<int, int> bfs(int start, int n, const vector<vector<int>>& adj) {
+    vector<int> dist(n + 1, -1);
+    queue<int> q;
+
+    q.push(start);
+    dist[start] = 0;
+
+    int farthest_node = start;
+    int max_dist = 0;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (dist[u] > max_dist) {
+            max_dist = dist[u];
+            farthest_node = u;
+        }
+
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
         }
     }
+
+    return {farthest_node, max_dist};
 }
 
 int main() {
@@ -29,10 +49,7 @@ int main() {
     cin.tie(NULL);
 
     int n;
-    if (!(cin >> n)) return 0;
-
-    if (n <= 1) {
-        cout << 0 << "\n";
+    if (!(cin >> n) || n <= 0) {
         return 0;
     }
 
@@ -44,15 +61,15 @@ int main() {
         adj[v].push_back(u);
     }
 
-    int max_depth = -1;
-    int farthest_node = 1;
-    dfs(1, 0, 0, max_depth, farthest_node, adj);
+    if (n == 1) {
+        cout << 0 << "\n";
+        return 0;
+    }
 
-    int diameter = -1;
-    int end_node = farthest_node;
-    dfs(farthest_node, 0, 0, diameter, end_node, adj);
+    // First BFS to find one endpoint of the longest path
+    pair<int, int> p1 = bfs(1, n, adj);
 
-    cout << diameter << "\n";
+    // Second BFS from the farthest node found to determine the diameter
+    pair<int, int> p2 = bfs(p1.first, n, adj);
 
-    return 0;
-}
+    cout << p2.second << "\n";
