@@ -2,9 +2,9 @@
 // Difficulty: Medium
 // Topic: sorting
 //
-// Description: Given a collection of intervals, merge all overlapping intervals and print the resulting intervals sorted by start time.
-// Example Input: 4 1 3 2 6 8 10 15 18
-// Example Output: 1 6 8 10 15 18
+// Description: Given a list of intervals, merge all overlapping intervals and output the final non-overlapping intervals in sorted order.
+// Example Input: 4 \n 1 3 \n 2 6 \n 8 10 \n 15 18
+// Example Output: 1 6 \n 8 10 \n 15 18
 
 #include <iostream>
 #include <vector>
@@ -52,8 +52,8 @@ int main() {
         }
     }
 
-    for (size_t i = 0; i < merged.size(); i++) {
-        cout << merged[i].start << " " << merged[i].end << "\n";
+    for (const auto& interval : merged) {
+        cout << interval.start << " " << interval.end << "\n";
     }
 
     return 0;
