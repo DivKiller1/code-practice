@@ -2,7 +2,7 @@
 // Difficulty: Medium
 // Topic: queue
 //
-// Description: Given a grid of fresh and rotten oranges, return the minimum time needed for all fresh oranges to become rotten using multi-source BFS with a queue.
+// Description: Given a grid of fresh oranges, rotten oranges, and empty cells, determine the minimum number of minutes that must elapse until no cell has a fresh orange. Return -1 if impossible.
 // Example Input: 3 3 2 1 1 1 1 0 0 1 1
 // Example Output: 4
 
@@ -17,16 +17,14 @@ int main() {
     cin.tie(NULL);
 
     int rows, cols;
-    if (!(cin >> rows >> cols)) {
-        return 0;
-    }
+    if (!(cin >> rows >> cols)) return 0;
 
     vector<vector<int>> grid(rows, vector<int>(cols));
     queue<pair<int, int>> q;
     int freshCount = 0;
 
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < cols; c++) {
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
             cin >> grid[r][c];
             if (grid[r][c] == 2) {
                 q.push({r, c});
@@ -47,14 +45,13 @@ int main() {
 
     while (!q.empty() && freshCount > 0) {
         int sz = q.size();
-        for (int i = 0; i < sz; i++) {
-            pair<int, int> current = q.front();
+        for (int i = 0; i < sz; ++i) {
+            pair<int, int> curr = q.front();
             q.pop();
+            int r = curr.first;
+            int c = curr.second;
 
-            int r = current.first;
-            int c = current.second;
-
-            for (int d = 0; d < 4; d++) {
+            for (int d = 0; d < 4; ++d) {
                 int nr = r + dr[d];
                 int nc = c + dc[d];
 
