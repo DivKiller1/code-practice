@@ -2,9 +2,8 @@
 // Difficulty: Medium
 // Topic: hashmaps
 //
-// Description: Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k using a hashmap.
-// Example Input: 3 2
-// 1 1 1
+// Description: Given an array of integers nums and an integer target k, return the total number of continuous subarrays whose sum equals to k.
+// Example Input: n = 3, k = 3, nums = [1, 2, 3]
 // Example Output: 2
 
 #include <iostream>
@@ -28,24 +27,24 @@ int main() {
         cin >> nums[i];
     }
 
-    unordered_map<long long, int> prefixSumFreq;
-    prefixSumFreq[0] = 1;
+    unordered_map<long long, int> prefix_sum_freq;
+    prefix_sum_freq[0] = 1;
 
-    long long currentSum = 0;
-    long long totalSubarrays = 0;
+    long long current_sum = 0;
+    long long total_subarrays = 0;
 
     for (int i = 0; i < n; i++) {
-        currentSum += nums[i];
+        current_sum += nums[i];
+        long long needed_prefix = current_sum - k;
 
-        long long targetSum = currentSum - k;
-        if (prefixSumFreq.find(targetSum) != prefixSumFreq.end()) {
-            totalSubarrays += prefixSumFreq[targetSum];
+        if (prefix_sum_freq.find(needed_prefix) != prefix_sum_freq.end()) {
+            total_subarrays += prefix_sum_freq[needed_prefix];
         }
 
-        prefixSumFreq[currentSum]++;
+        prefix_sum_freq[current_sum]++;
     }
 
-    cout << totalSubarrays << "\n";
+    cout << total_subarrays << "\n";
 
     return 0;
 }

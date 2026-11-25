@@ -2,23 +2,46 @@
 // Difficulty: Medium
 // Topic: trees
 //
-// Description: Given an unweighted tree with N nodes and N-1 edges, find its diameter, which is the length of the longest simple path (number of edges) between any two nodes.
-// Example Input: 5 \n 1 2 \n 1 3 \n 2 4 \n 2 5
+// Description: Given an unweighted, undirected tree with N nodes and N-1 edges, calculate the diameter of the tree, which is the length of the longest path between any pair of nodes.
+// Example Input: 5 1 2 1 3 2 4 2 5
 // Example Output: 3
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <utility>
+
 using namespace std;
 
-void dfs(int u, int p, int dist, const vector<vector<int>>& adj, int& max_dist, int& farthest_node) {
-    if (dist > max_dist) {
-        max_dist = dist;
-        farthest_node = u;
-    }
-    for (int v : adj[u]) {
-        if (v != p) {
-            dfs(v, u, dist + 1, adj, max_dist, farthest_node);
+// Function to perform BFS and return the farthest node and its distance from the start node
+pair<int, int> bfs(int start_node, int n, const vector<vector<int>>& adj) {
+    vector<int> dist(n + 1, -1);
+    queue<int> q;
+
+    q.push(start_node);
+    dist[start_node] = 0;
+
+    int farthest_node = start_node;
+    int max_dist = 0;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (dist[u] > max_dist) {
+            max_dist = dist[u];
+            farthest_node = u;
+        }
+
+        for (int v : adj[u]) {
+            if (dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
         }
     }
+
+    return {farthest_node, max_dist};
 }
 
 int main() {
@@ -26,10 +49,7 @@ int main() {
     cin.tie(NULL);
 
     int n;
-    if (!(cin >> n)) return 0;
-
-    if (n <= 1) {
-        cout << 0 << "\n";
+    if (!(cin >> n) || n <= 0) {
         return 0;
     }
 
@@ -41,18 +61,18 @@ int main() {
         adj[v].push_back(u);
     }
 
-    int max_dist = -1;
-    int farthest_node = 1;
+    if (n == 1) {
+        cout << 0 << "\n";
+        return 0;
+    }
 
-    // First DFS to find the node farthest from node 1
-    dfs(1, 0, 0, adj, max_dist, farthest_node);
+    // Step 1: Find the farthest node from an arbitrary node (node 1)
+    pair<int, int> p1 = bfs(1, n, adj);
 
-    // Second DFS from the farthest node found to determine tree diameter
-    int start_node = farthest_node;
-    max_dist = -1;
-    dfs(start_node, 0, 0, adj, max_dist, farthest_node);
+    // Step 2: Find the farthest node from p1.first to determine the diameter
+    pair<int, int> p2 = bfs(p1.first, n, adj);
 
-    cout << max_dist << "\n";
+    cout << p2.second << "\n";
 
     return 0;
 }

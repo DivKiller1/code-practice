@@ -2,8 +2,8 @@
 // Difficulty: Medium
 // Topic: two pointers
 //
-// Description: Given an array of line heights, find two lines that together with the x-axis form a container holding the maximum amount of water.
-// Example Input: heights = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+// Description: Given an array of non-negative integers representing vertical line heights, find two lines that together with the x-axis form a container containing the most water. Return the maximum area of water that can be stored.
+// Example Input: 9 1 8 6 2 5 4 8 3 7
 // Example Output: 49
 
 #include <iostream>
@@ -11,27 +11,6 @@
 #include <algorithm>
 
 using namespace std;
-
-int maxArea(const vector<int>& height) {
-    int left = 0;
-    int right = height.size() - 1;
-    int max_water = 0;
-
-    while (left < right) {
-        int current_height = min(height[left], height[right]);
-        int width = right - left;
-        int current_water = current_height * width;
-        max_water = max(max_water, current_water);
-
-        if (height[left] < height[right]) {
-            left++;
-        } else {
-            right--;
-        }
-    }
-
-    return max_water;
-}
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -47,8 +26,25 @@ int main() {
         cin >> height[i];
     }
 
-    int result = maxArea(height);
-    cout << result << "\n";
+    int left = 0;
+    int right = n - 1;
+    long long max_area = 0;
+
+    while (left < right) {
+        long long current_height = min(height[left], height[right]);
+        long long current_width = right - left;
+        long long current_area = current_height * current_width;
+
+        max_area = max(max_area, current_area);
+
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    cout << max_area << "\n";
 
     return 0;
 }
