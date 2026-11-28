@@ -2,14 +2,11 @@
 // Difficulty: Medium
 // Topic: dynamic programming
 //
-// Description: Given N items with specific weights and values, determine the maximum total value of items that can be packed into a knapsack of capacity W.
-// Example Input: 3 50\n60 100 120\n10 20 30
-// Example Output: 220
+// Description: Given weights and values of N items, determine the maximum total value that can be placed in a knapsack of capacity W. Each item can either be chosen or not.
+// Example Input: 3 5\n1 2 3\n10 15 40
+// Example Output: 55
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -21,23 +18,24 @@ int main() {
         return 0;
     }
 
-    vector<int> val(n);
+    vector<int> weights(n);
     for (int i = 0; i < n; i++) {
-        cin >> val[i];
+        cin >> weights[i];
     }
 
-    vector<int> wt(n);
+    vector<int> values(n);
     for (int i = 0; i < n; i++) {
-        cin >> wt[i];
+        cin >> values[i];
     }
 
-    // dp[i][j] stores the maximum value using a subset of the first i items with max capacity j
     vector<vector<int>> dp(n + 1, vector<int>(w + 1, 0));
 
     for (int i = 1; i <= n; i++) {
+        int current_weight = weights[i - 1];
+        int current_value = values[i - 1];
         for (int j = 0; j <= w; j++) {
-            if (wt[i - 1] <= j) {
-                dp[i][j] = max(dp[i - 1][j], val[i - 1] + dp[i - 1][j - wt[i - 1]]);
+            if (current_weight <= j) {
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - current_weight] + current_value);
             } else {
                 dp[i][j] = dp[i - 1][j];
             }

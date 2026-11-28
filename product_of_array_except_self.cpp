@@ -2,13 +2,11 @@
 // Difficulty: Medium
 // Topic: arrays
 //
-// Description: Given an array of integers nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i], solved in O(n) time without division.
-// Example Input: 4 1 2 3 4
+// Description: Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+// Example Input: 4 \n 1 2 3 4
 // Example Output: 24 12 8 6
 
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -20,27 +18,27 @@ int main() {
         return 0;
     }
 
-    vector<int> nums(n);
+    vector<long long> nums(n);
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
 
-    vector<int> answer(n, 1);
+    vector<long long> result(n, 1);
 
-    int prefixProduct = 1;
+    long long prefixProduct = 1;
     for (int i = 0; i < n; i++) {
-        answer[i] = prefixProduct;
+        result[i] = prefixProduct;
         prefixProduct *= nums[i];
     }
 
-    int suffixProduct = 1;
+    long long suffixProduct = 1;
     for (int i = n - 1; i >= 0; i--) {
-        answer[i] *= suffixProduct;
+        result[i] *= suffixProduct;
         suffixProduct *= nums[i];
     }
 
     for (int i = 0; i < n; i++) {
-        cout << answer[i] << (i == n - 1 ? "" : " ");
+        cout << result[i] << (i == n - 1 ? "" : " ");
     }
     cout << "\n";
 
